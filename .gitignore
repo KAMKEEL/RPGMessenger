@@ -1,0 +1,12 @@
+# Personal Directory and Files
+
+.gradle
+.idea
+out
+build
+.classpath
+.project
+.settings
+bin
+.metadata
+spigot-1.7.10-SNAPSHOT-b1657
