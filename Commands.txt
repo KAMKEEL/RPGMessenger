@@ -1,0 +1,10 @@
+Commands:
+
+
+npc > Display NPC Commands
+- help (displays all npc commands)
+- id (npc id NAME)
+- id NAME
+- swap ID ID
+- add NAME
+- remove NAME

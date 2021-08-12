@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/NPCMsgs.iml" filepath="$PROJECT_DIR$/NPCMsgs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RPGMessenger.iml" filepath="$PROJECT_DIR$/RPGMessenger.iml" />
     </modules>
   </component>
 </project>

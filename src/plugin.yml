@@ -1,14 +1,30 @@
-name: NPCMsgs
+name: RPGMessenger
 author: KAMKEEL
-main: me.Kam.NPCMsgs.NPCMsgs
-version: 3.2
-description: This plugin allows players to message NPCs created by OPs. 
+main: kamkeel.RPGMessenger.RPGMessenger
+version: 1.0
+description: RPG Messenger | A plugin to allow NPC, Fake Names and Broadcast Messengening for RPG Servers
 commands:
-  fmn:
-    description: Changes your fake name
-    usage: /fmn <FakeName> OR /fmnid <NPC id>
-    permission: fm.name
-    aliases: [fakemessagename,fmnid]
+  npc:
+    description: View and modify the server NPCs
+    usage: |
+      /npc <add/remove> <Name> - Add or Delete NPCs
+      /npc clear - Removes All NPCs
+      /npc rename <ID> <Name> - Rename an NPC
+      /npc swap <ID> <ID> - Swap NPC IDs
+      /npc list <pageNum> - List all Active NPCs
+      /npc id <Name> or /npcid <Name> - Search for an NPCs ID
+    aliases: npcid
+    permission: rpg.npc
+    permission-message: Sorry! You don't have permission to execute that command.
+  rpg:
+    description: Allows for Fake Name set for messaging and outloud chat
+    usage: |
+      /rpg id <#> - Sets RPG name using an NPC id
+      /rpg name <NAME> - Sets RPG name using custom Name
+      /rpg msg <Player> <Text> - Messages a player using your fake rpg name
+      /rpg say <Text> - Talks to public chat using your fake rpg name
+    permission: rpg.fake
+    permission-message: Sorry! You don't have permission to execute that command.
   fm: 
     description: Sends a message with your fakename!
     usage: /fm <Player> <Message>
@@ -35,11 +51,6 @@ commands:
     usage: /nr <Player> <msg>
     aliases: []
     permission: fm.send
-  npc:
-    description: View and modify the server NPCs
-    usage: /npc <add/remove> <Name> , clear , Rename <ID> <Name> , Swap [ID] [ID] |list <page> , /npcid <Name>
-    aliases: npcid
-    permission: fm.npc
   group:
     description: View and modify the server Groups
     usage: /group help
@@ -64,13 +75,17 @@ commands:
     usage: /fsa <Fake Name> <Message>
     permission: fm.send
     aliases: [fakesayas,fsid]
-  request:
-    description: Request an NPC
-    usage: /request <NPCName>
-    aliases: []
 permsissions:
-  fm.spy:
+  rpg.npc:
+    default: op
+  rpg.spy:
    default: op
+  rpg.*:
+    children:
+      rpg.npc
+      rpg.group
+      rpg.fake
+      rpg.spy
   fm.name: 
    default: op
   fm.send:

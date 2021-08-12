@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="NPCmsgs_Server">
-    <output-path>$PROJECT_DIR$/../../.Plugin/Test Plugin/plugins</output-path>
-    <root id="archive" name="NPCmsgs_Server.jar">
-      <element id="library" level="project" name="spigot-1.7.10-SNAPSHOT-b1657" />
-      <element id="module-output" name="NPCMsgs" />
-    </root>
-  </artifact>
-</component>
