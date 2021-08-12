@@ -1,0 +1,16 @@
+# Personal Directory and Files
+
+.gradle
+.idea
+build
+out
+eclipse
+.classpath
+.project
+.settings
+bin
+.metadata
+spigot-api-1.7.10-R0.1-20140904.092507-105
+spigot-1.7.10-SNAPSHOT-b1657
+.gitattributes
+Commands
