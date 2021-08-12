@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="RPGMessenger">
+    <output-path>$PROJECT_DIR$/../../.Plugin/Test Plugin/plugins</output-path>
+    <root id="archive" name="RPGMessenger.jar">
+      <element id="module-output" name="RPGMessenger" />
+    </root>
+  </artifact>
+</component>
