@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="Plugin:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/Plugin_jar</output-path>
-    <root id="archive" name="NPCMsgs.jar">
-      <element id="module-output" name="RPGMessenger" />
-      <element id="library" level="project" name="Spigot-Api" />
-    </root>
-  </artifact>
-</component>
