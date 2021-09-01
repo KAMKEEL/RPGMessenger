@@ -49,6 +49,7 @@ public class ConfigGroup {
             Member currentMem = group.getMember(i);
             config.set("Members." + convertToRawPlayer(currentMem.getName()) + ".DisplayName", convertColorSign(currentMem.getDisplayName()));
             config.set("Members." + convertToRawPlayer(currentMem.getName()) + ".IsPlayer", currentMem.getIsPlayer());
+            config.set("Members." + convertToRawPlayer(currentMem.getName()) + ".Type", currentMem.getType());
         }
     }
 
@@ -82,8 +83,9 @@ public class ConfigGroup {
                         for(String category : memberCollection){
                             String memberDisplayName = groupConfig.getString("Members." + category + ".DisplayName");
                             boolean memberIsPlayer = groupConfig.getBoolean("Members." + category + ".IsPlayer");
+                            int memberType = groupConfig.getInt("Members." + category + ".Type");
                             if(memberDisplayName != null){
-                                memberList.add(new Member(category, memberDisplayName, memberIsPlayer));
+                                memberList.add(new Member(category, memberDisplayName, memberIsPlayer, memberType));
                             }
                         }
                     }
@@ -173,6 +175,31 @@ public class ConfigGroup {
         return(-1);
     }
 
+    public boolean groupSwap(int indexOne, int indexTwo){
+        if(validIndex(indexOne) && validIndex(indexTwo)){
+            FileConfiguration firstConfig = groupcfgs.get(indexOne);
+            FileConfiguration secondConfig = groupcfgs.get(indexTwo);
+
+            groupcfgs.set(indexOne, secondConfig);
+            groupcfgs.set(indexTwo, firstConfig);
+
+
+            File firstFile = groupsfiles.get(indexOne);
+            File secondFile = groupsfiles.get(indexTwo);
+
+            groupsfiles.set(indexOne, secondFile);
+            groupsfiles.set(indexTwo, firstFile);
+
+            String firstName = groupNames.get(indexOne);
+            String secondName = groupNames.get(indexTwo);
+
+            groupNames.set(indexOne, secondName);
+            groupNames.set(indexTwo, firstName);
+
+            return true;
+        }
+        return false;
+    }
 
     public void renameGroupFile(int index, String oldName, String newName){
         File groupsfile  = new File(plugin.getDataFolder(), ("groups" + File.separator + oldName + ".yml"));

@@ -1,6 +1,5 @@
 package kamkeel.RPGMessenger;
 
-import kamkeel.RPGMessenger.Util.RPGStringHelper;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -62,14 +61,14 @@ public class Group {
 
         if(player){
             for (Member person : members) {
-                if (person.getName().toLowerCase().equals(who) && person.getMemberType()) {
+                if (person.getName().toLowerCase().equals(who) && person.MemberIsPlayer()) {
                     return true;
                 }
             }
         }
         else{
             for (Member person : members) {
-                if (person.getName().toLowerCase().equals(who) && !person.getMemberType()) {
+                if (person.getName().toLowerCase().equals(who) && !person.MemberIsPlayer()) {
                     return true;
                 }
             }
@@ -109,7 +108,6 @@ public class Group {
     public boolean validIndex(int index){
         return (listLength() > index && index > -1);
     }
-
 
     public String getMemberName(int index) {
         if (validIndex(index)) {
@@ -180,12 +178,27 @@ public class Group {
 
     @Override
     public String toString(){
-        return name + "_" + tag;
+        return name + "_" + tag + "_" + opTag;
     }
 
     public boolean isGroupOwner(Player sender){
         if(listLength() > 0){
-            return getIndex(sender.getName(), true) == 0;
+            int index = getIndex(sender.getName(), true);
+            if(validIndex(index)){
+                return getMember(index).getType() == 2;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public boolean isGroupMod(Player sender){
+        if(listLength() > 0){
+            int index = getIndex(sender.getName(), true);
+            if(validIndex(index)){
+                return getMember(index).getType() == 1;
+            }
+            return false;
         }
         return false;
     }
@@ -198,6 +211,42 @@ public class Group {
             members.set(indexTwo, first);
             return true;
         }
+        return false;
+    }
+
+    public boolean PromoteMember(String member){
+        int playerIndex = getIndex(member, true);
+        if(validIndex(playerIndex)){
+            if(getMember(playerIndex).getType() == 0){
+                getMember(playerIndex).setType(1);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean DemoteMember(String member){
+        int playerIndex = getIndex(member, true);
+        if(validIndex(playerIndex)){
+            if(getMember(playerIndex).getType() == 1){
+                getMember(playerIndex).setType(0);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean setOwner(String member){
+        int playerIndex = getIndex(member, true);
+        if(validIndex(playerIndex)){
+            if(getMember(playerIndex).getType() != 2){
+                getMember(0).setType(1);
+                getMember(playerIndex).setType(2);
+                memberSwap(0, playerIndex);
+                return true;
+            }
+        }
+
         return false;
     }
 

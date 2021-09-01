@@ -189,7 +189,7 @@ public class GroupControl {
         return false;
     }
 
-    public boolean hasEditPermission(int index, CommandSender sender) {
+    public boolean hasEditPermission(int index, CommandSender sender, boolean mustBeOwner) {
         if(!(sender instanceof Player)){
             return true;
         }
@@ -197,7 +197,10 @@ public class GroupControl {
             return true;
         }
         else{
-            return getGroup(index).isGroupOwner(((Player)sender));
+            if(mustBeOwner){
+                return getGroup(index).isGroupOwner(((Player)sender));
+            }
+            return getGroup(index).isGroupMod(((Player)sender)) || getGroup(index).isGroupOwner(((Player)sender));
         }
     }
 

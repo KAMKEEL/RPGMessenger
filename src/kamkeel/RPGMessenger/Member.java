@@ -7,6 +7,7 @@ public class Member {
     private String name; // Without Color Codes or Spaces (;)
     private String displayName; // With Color Codes and Spaces (;)
     private final boolean isPlayer;
+    private int type = 0;
 
     // For NPC
     public Member(String _name){
@@ -22,10 +23,11 @@ public class Member {
         isPlayer = true;
     }
 
-    public Member(String _name, String _displayName, boolean playerType){
+    public Member(String _name, String _displayName, boolean playerType, int _type){
         name = convertToRawPlayer(_name);
         displayName = convertSpace(convertColor(_displayName));
         isPlayer = playerType;
+        type = _type;
     }
 
     public String getName(){
@@ -34,6 +36,14 @@ public class Member {
 
     public String getDisplayName(){
         return displayName;
+    }
+
+    public int getType(){
+        return type;
+    }
+
+    public void setType(int i){
+        type = i;
     }
 
     public String getSaveName(){
@@ -45,7 +55,7 @@ public class Member {
         displayName = convertSpace(convertColor(newName));
     }
 
-    public boolean getMemberType(){
+    public boolean MemberIsPlayer(){
         return isPlayer;
     }
 
