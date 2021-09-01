@@ -1,0 +1,65 @@
+------------------------------------------------------------------
+------------------------------------------------------------------
+------------------------------------------------------------------
+------------------------------------------------------------------
+
+Before >>
+
+----- CONSOLE ----- 
+/nr Player --> 
+   	Most Recent NPC						[uses reply]
+
+
+/idm NPC_ID Player --> NPC to Player Message  						[Reply, Type: 0]					(/NPCID)
+/idg NPC_ID Group  --> NPC to Group Message							[Reply, Type: 2, GroupReply]		(/NPCID)
+
+Private Public (Local)
+/idm NPC_ID: 2 Player NPC_ID: &dKoi: Hello 
+
+----- Player ----- 
+
+/msg  --> Message 	Player/NPC     
+/gmsg --> Messages 	Group
+
+/r  --> Replies to Recent Private Message
+/gr --> Replies to Recent Group
+
+
+------------------------------------------------------------------
+------------------------------------------------------------------
+------------------------------------------------------------------
+------------------------------------------------------------------
+
+After >>
+
+----- CONSOLE ----- 
+/nr Player --> 
+   	If Type 0: Most Recent NPC									[uses reply]
+	If Type 1: Most Recent NPC									[uses reply]
+	If Type 2: Most Recent NPC to Recent Group					[uses reply and groupreply]
+
+/lr NPC Player --> 
+   	If Type 0: Does /idm NPC Player								[uses reply]
+	If Type 1: Does /idp NPC Player								[uses reply]
+	If Type 2: Most Recent NPC to Recent Group					[uses reply and groupreply]
+
+/gr Group --> Reply as Most Recent NPC to a Group 				[uses groupnpc]
+
+/idm NPC Player --> NPC to Player Message  						[Reply, Type: 0]
+/idp,idl NPC Player --> NPC to Public Player Message				[Reply, Type: 1]
+/idg NPC Group  --> NPC to Group Message						[Reply, Type: 2, GroupReply, GroupNPC]
+
+----- Player ----- 
+
+/msg  --> Message 			Player/NPC 			Reply: "Koi", ReplyType: 0
+/pmsg,lmsg --> Messages 	Private Public		Reply: "Koi", ReplyType: 1
+/gmsg --> 	Messages 		Group				GroupReply: "TSQD", ReplyType: 2
+		
+/r  --> 
+   	If Type 0: Replies to Most Recent Private Message
+	If Type 1: Replies to Most Recent Private Public Message
+	If Type 2: Replies to Most Recent Group Message
+
+
+
+

@@ -1,144 +1,204 @@
 package kamkeel.RPGMessenger;
+
+import kamkeel.RPGMessenger.Util.RPGStringHelper;
+import org.bukkit.entity.Player;
+
 import java.util.List;
+
+import static kamkeel.RPGMessenger.Util.ColorConvert.*;
 
 public class Group {
 
-    private static String split = "-!012700!-";
-    private List<String> recipients = new java.util.ArrayList();
-    private String groupName;
+    public List<Member> members = new java.util.ArrayList<>();
+
+    private String name; // Without Color Codes or Spaces (;)
+    private String displayName; // With Color Codes and Spaces (;)
+
     private String tag;
+    private String displayTag;
+
     private String opTag;
-    private boolean tagToggle;
+    private String displayOpTag;
 
-    public Group(String name){
-        groupName = name;
-        tag = name;
-        opTag = name;
-        tagToggle = false;
+
+    public Group(String _name){
+        name = convertToRaw(_name);
+        displayName = convertSpace(convertColor(_name));
+
+        tag = convertToRaw(_name);
+        displayTag = convertSpace(convertColor(_name));
+
+        opTag = convertToRaw(_name);
+        displayOpTag = convertSpace(convertColor(_name));
     }
 
-    public Group(String name, String tagString, boolean toggle, String op, List<String> people){
-        groupName = name;
-        recipients = people;
-        tag = tagString;
-        opTag = op;
-        tagToggle = toggle;
+    public Group(String _name, String _tag, String _opTag, List<Member> memberList){
+        name = convertToRaw(_name);
+        displayName = convertSpace(convertColor(_name));
+
+        tag = convertToRaw(_tag);
+        displayTag = convertSpace(convertColor(_tag));
+
+        opTag = convertToRaw(_opTag);
+        displayOpTag = convertSpace(convertColor(_opTag));
+
+        members = memberList;
     }
 
-    public String returnName(){
-        return groupName;
+    public String getName(){
+        return name;
+    }
+    public String getDisplayName(){
+        return displayName;
     }
 
-    public int addPlayer(String target){
-        for(int i = 0; i < recipients.size(); i++){
-            if(target.equals(recipients.get(i))){
+    public void rename(String newName){
+        name = convertToRaw(newName);
+        displayName = convertSpace(convertColor(newName));
+    }
+
+    public boolean hasMember(String who, boolean player){
+        who = convertToRawPlayer(who).toLowerCase();
+
+        if(player){
+            for (Member person : members) {
+                if (person.getName().toLowerCase().equals(who) && person.getMemberType()) {
+                    return true;
+                }
+            }
+        }
+        else{
+            for (Member person : members) {
+                if (person.getName().toLowerCase().equals(who) && !person.getMemberType()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public int getIndex(String _name, boolean player){
+        _name = convertToRawPlayer(_name).toLowerCase();
+        if(player){
+            if (members.toString().toLowerCase().contains( _name ))
+            {
+                for(int i = 0; i < listLength(); i++){
+                    if ((getMemberName(i).toLowerCase().equals( _name ))) {
+                        return (i);
+                    }
+                }
                 return(-1);
             }
         }
-        recipients.add(target);
-        return 0;
-    }
-
-    public int removePlayer(String target){
-        if(recipients.indexOf(target) == -1) {
-            return -1;
+        else{
+            if (members.toString().toLowerCase().contains( _name ))
+            {
+                for(int i = 0; i < listLength(); i++){
+                    if ((getMemberName(i).toLowerCase()).startsWith( _name )) {
+                        return (i);
+                    }
+                }
+                return(-1);
+            }
         }
-        recipients.remove(target);
-        return 0;
+
+        return(-1);
     }
 
-    public int setName(String target){
-        groupName = target;
-        return 0;
+    public boolean validIndex(int index){
+        return (listLength() > index && index > -1);
     }
 
-    public int setTag(String target){
-        tag = target;
-        return 0;
+
+    public String getMemberName(int index) {
+        if (validIndex(index)) {
+            return members.get(index).getName();
+        }
+        return "--ERROR";
+    }
+
+    public Member getMember(int index) {
+        if (validIndex(index)) {
+            return members.get(index);
+        }
+        return null;
+    }
+
+    public List<Member> getMembers() {
+        return members;
+    }
+
+    public int listLength(){
+        return members.size();
+    }
+
+    public boolean addNPC(String target){
+        if (hasMember(target, false)){
+            return false;
+        }
+        members.add(new Member(target));
+        return true;
+    }
+
+    public boolean addPlayer(Player target){
+        if (hasMember(target.getName(), true)){
+            return false;
+        }
+        members.add(new Member(target.getName(), target.getDisplayName()));
+        return true;
+    }
+
+    public boolean removeMember(String target, boolean player){
+        int index = getIndex(target, player);
+        if(index == -1){
+            return false;
+        }
+        members.remove(index);
+        return true;
     }
 
     public String getTag(){
         return tag;
     }
-
-    public int setOpTag(String target){
-        opTag = target;
-        return 0;
+    public String getDisplayTag(){
+        return displayTag;
     }
 
-    public String getOpTag(){
-        return opTag;
+    public void setTag(String newName){
+        tag = convertToRaw(newName);
+        displayTag = convertSpace(convertColor(newName));
     }
 
-    public int setTagToggle(boolean target){
-        tagToggle = target;
-        return 0;
-    }
+    public String getOpTag(){ return opTag; }
+    public String getDisplayOpTag(){ return displayOpTag; }
 
-    public boolean getTagToggle(){
-        return tagToggle;
-    }
-
-    public List<String> allPeople(){
-        return recipients;
+    public void setOpTag(String newName){
+        opTag = convertToRaw(newName);
+        displayOpTag = convertSpace(convertColor(newName));
     }
 
     @Override
     public String toString(){
-        return groupName;
+        return name + "_" + tag;
     }
 
-    public String serialize(){
-        String serializedString = groupName + split + tag;
-
-        if(tagToggle){
-            serializedString += split + 1;
+    public boolean isGroupOwner(Player sender){
+        if(listLength() > 0){
+            return getIndex(sender.getName(), true) == 0;
         }
-        else{
-            serializedString += split + 0;
-        }
-
-        serializedString += split + opTag;
-
-        int size = recipients.size();
-
-        //Here we are adding the size to the string.
-        serializedString += split+size;
-
-        //For this example, we are looping through strings. If this was a custom class or another object,
-        //you would need to have a toString method to convert that object to a string.
-        for(String member : recipients){
-            serializedString += split+member;
-        }
-        return serializedString;
+        return false;
     }
 
-    public static Group deserialize(String serializedString){
-        String[] values = serializedString.split(split);
-
-        //The first variable is the 'number' field, so the first object in the 'values' array will be that number
-        String groupName = values[0];
-        String tagName = values[1];
-        boolean tagID;
-        if (values[2].equals("1")){
-             tagID = true;
+    public boolean memberSwap(int indexOne, int indexTwo){
+        if(validIndex(indexOne) && validIndex(indexTwo)){
+            Member first = members.get(indexOne);
+            Member second = members.get(indexTwo);
+            members.set(indexOne, second);
+            members.set(indexTwo, first);
+            return true;
         }
-        else{
-            tagID = false;
-        }
-
-        String ops = values[3];
-
-        //The second variable is the size of the list field, so the second object in the 'values' array will be the size
-        int size = Integer.valueOf(values[4]);
-
-        List<String> people = new java.util.ArrayList();
-
-        //Now we need to loop through the rest of the values in the array. This will start at the second index, and loop through all the rest of the values.
-        for(int i = 5; i < 5+size; i++){
-            people.add(values[i]);
-        }
-
-        return new Group(groupName, tagName, tagID, ops, people);
+        return false;
     }
+
 }

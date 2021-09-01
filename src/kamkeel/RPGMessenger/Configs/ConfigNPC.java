@@ -12,45 +12,44 @@ import java.io.IOException;
 
 public class ConfigNPC {
 
-    private static RPGMessenger plugin = RPGMessenger.getPlugin(RPGMessenger.class);
+    private static final RPGMessenger plugin = RPGMessenger.getPlugin(RPGMessenger.class);
+
+    private final String configName;
+
+    public ConfigNPC(String name){
+        configName = name;
+    }
 
     // Files & File Configs Here
-    public static FileConfiguration npccfg;
-    public static  File npcfile;
-    // --------------------------
+    public static FileConfiguration config;
+    public static  File file;
 
-    public static void setup() {
+    public void setup() {
         if (!plugin.getDataFolder().exists()) {
             plugin.getDataFolder().mkdir();
         }
-        npcfile = new File(plugin.getDataFolder(), "npc.yml");
-        if (!npcfile.exists()) {
-            plugin.saveResource("npc.yml", false);
-//            try {
-//                npcfile.createNewFile();
-//            } catch (IOException e) {
-//                Bukkit.getServer().getConsoleSender()
-//                        .sendMessage(NPCStringHelper.TAG + "Could not create the npc.yml file");
-//            }
+        file = new File(plugin.getDataFolder(), (configName + ".yml"));
+        if (!file.exists()) {
+            plugin.saveResource((configName + ".yml"), false);
         }
 
-        reloadNPC();
+        reloadConfig();
     }
 
-    public static FileConfiguration getNPCcfg() {
-        return npccfg;
+    public FileConfiguration getConfig() {
+        return config;
     }
 
-    public static void saveNPC() {
+    public void saveConfig() {
         try {
-            npccfg.save(npcfile);
+            config.save(file);
         } catch (IOException e) {
-            Bukkit.getServer().getConsoleSender().sendMessage(RPGStringHelper.TAG + ChatColor.RED + "Could not save the npc.yml file");
+            Bukkit.getServer().getConsoleSender().sendMessage(RPGStringHelper.TAG + ChatColor.RED + "Could not save the " + configName + ".yml file");
         }
     }
 
-    public static void reloadNPC() {
-        npccfg = YamlConfiguration.loadConfiguration(npcfile);
+    public void reloadConfig() {
+        config = YamlConfiguration.loadConfiguration(file);
     }
 
 }

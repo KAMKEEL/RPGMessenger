@@ -2,12 +2,12 @@ package kamkeel.RPGMessenger.Util;
 
 public class ColorConvert {
 
-    public static final String[] colorCodesLower = {"&a", "&b", "&c", "&d", "&e", "&f", "&g", "&k", "&l", "&m", "&n", "&o"};
-    public static final String[] colorCodesUpper = {"&A", "&B", "&C", "&D", "&E", "&F", "&G", "&K", "&L", "&M", "&N", "&O"};
+    public static final String[] colorCodesLower = {"&a", "&b", "&c", "&d", "&e", "&f", "&g", "&k", "&l", "&m", "&n", "&o", "&r"};
+    public static final String[] colorCodesUpper = {"&A", "&B", "&C", "&D", "&E", "&F", "&G", "&K", "&L", "&M", "&N", "&O", "&R"};
     public static final String[] colorCodesNums = {"&1", "&2", "&3", "&4", "&5", "&6", "&7", "&8", "&9", "&0"};
 
-    public static final String[] colorCodesRawLower = {"§a", "§b", "§c", "§d", "§e", "§f", "§g", "§k", "§l", "§m", "§n", "§o"};
-    public static final String[] colorCodesRawUpper = {"§A", "§B", "§C", "§D", "§E", "§F", "§G", "§K", "§L", "§M", "§N", "§O"};
+    public static final String[] colorCodesRawLower = {"§a", "§b", "§c", "§d", "§e", "§f", "§g", "§k", "§l", "§m", "§n", "§o", "§r"};
+    public static final String[] colorCodesRawUpper = {"§A", "§B", "§C", "§D", "§E", "§F", "§G", "§K", "§L", "§M", "§N", "§O", "§R"};
     public static final String[] colorCodesRawNums = {"§1", "§2", "§3", "§4", "§5", "§6", "§7", "§8", "§9", "§0"};
 
     public static String removeColorCodes(String s){
@@ -58,8 +58,10 @@ public class ColorConvert {
         return removeSpace(removeColorCodes(s));
     }
 
+    public static String convertColorSign(String s){ return s.replace("§", "&"); }
+
     public static String convertToRawPlayer(String s){
-        return removeSpace(removeColorCodes(s.replace("§", "&")));
+        return removeSpace(removeColorCodes(convertColorSign(s)));
     }
 
     public static String convertToSaveNPC(String s){

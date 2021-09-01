@@ -15,88 +15,73 @@ commands:
       /npc id <Name> or /npcid <Name> - Search for an NPCs ID
     aliases: npcid
     permission: rpg.npc
-    permission-message: Sorry! You don't have permission to execute that command.
-  rpg:
+    permission-message: §cSorry! You don't have permission to execute that command.
+  npcmsg:
+    description: Sends a player a private message
+    usage: |
+      /npcmsg <npcName/npcID> <player> <message>
+      /npcreply <player> <message>
+    permission: rpg.npc
+    aliases: [idm, nms, nm, npcm, npcreply, npcr, nr, npcsay, npcs, ns]
+    permission-message: §cSorry! You don't have permission to execute that command.
+  groupmsg:
+    description: Sends a group a private message as an NPC
+    usage: |
+      /groupmsg <npcName/npcID> <groupName..Tag..ID> <message>
+      /groupreply <groupName..Tag..ID> <message>
+    permission: rpg.npc
+    aliases: [idg, groupm, groupreply, grouprr, gr]
+    permission-message: §cSorry! You don't have permission to execute that command.
+  role:
     description: Allows for Fake Name set for messaging and outloud chat
     usage: |
-      /rpg id <#> - Sets RPG name using an NPC id
-      /rpg name <NAME> - Sets RPG name using custom Name
-      /rpg msg <Player> <Text> - Messages a player using your fake rpg name
-      /rpg say <Text> - Talks to public chat using your fake rpg name
-    permission: rpg.fake
-    permission-message: Sorry! You don't have permission to execute that command.
-  fm: 
-    description: Sends a message with your fakename!
-    usage: /fm <Player> <Message>
-    permission: fm.send
-    aliases: fakemessage
+      /role id <#> - Sets RPG name using an NPC id
+      /role name <NAME> - Sets RPG name using custom Name
+      /role msg <Player> <Text> - Messages a player using your fake rpg name
+      /role say <Text> - Talks to public chat using your fake rpg name
+      /role list <#> - Displays current Role Names
+    permission: rpg.role
+    permission-message: §cSorry! You don't have permission to execute that command.
+  tmp:
+    description: Allows for Fake Name set for messaging and outloud chat
+    usage: |
+      /tmpmsg or /tm <NAME> <Player> <Text> - Messages a player using a temporary npc name
+      /tmpsay or /ts <NAME> <Text> - Talks to public chat using a temporary npc name
+      /tmplist or /tlist <Player> <Text> - Displays all curent temporary NPC names
+    permission: rpg.tmp
+    aliases: [tmpmsg, tm, tmpsay, ts, tmplist, tlist]
+    permission-message: §cSorry! You don't have permission to execute that command.
   msg:
     description: Sends a player a private message
     usage: /msg <player> <message>
-    aliases: [pm,m,t,emsg,epm,tell,etell,ewhisper,w, whisper]
+    aliases: [pm,m,t,emsg,epm,tell,etell,ewhisper,w, whisper, message]
   gmsg:
     description: Sends a group a private message
-    usage: /gmsg <group> <message>
-    aliases: [groupmessage, gid]
+    usage: /gmsg <groupName..Tag..ID> <message>
+    aliases: [groupmessage, gid, gmessage]
+  pmsg:
+    description: Sends a private public (local) message
+    usage: /pmsg <message>
+    aliases: [lmsg, publicmessage, localmessage, lmessage, pmessage]
   r:
     description: Quickly reply to a message
     usage: /r <msg>
     aliases: [er, reply, ereply]
-  gr:
-    description: Quickly reply to a group message
-    usage: /gr <msg>
-    aliases: []
-  nr:
-    description: Quickly reply to a message using an NPC
-    usage: /nr <Player> <msg>
-    aliases: []
-    permission: fm.send
   group:
     description: View and modify the server Groups
     usage: /group help
     aliases: group
-  fs: 
-    description: Sends a public chat message with your fake name
-    usage: /fs <Message>
-    permission: fm.send
-    aliases: fakesay
-  fma: 
-    description: Sends an npc a message as another player
-    usage: /fma <Fake Name> <Player> <Message>
-    permission: fm.send
-    aliases: [idm, fakemessageas, nma]
-  fga:
-    description: Sends an npc a message as another group
-    usage: /fga <NPCName> <Group> <Message>
-    permission: fm.send
-    aliases: [idig, idg, ng, nga, fgan]
-  fsa:
-    description: Send a public message with a fake name
-    usage: /fsa <Fake Name> <Message>
-    permission: fm.send
-    aliases: [fakesayas,fsid]
 permsissions:
   rpg.npc:
     default: op
   rpg.spy:
    default: op
+  rpg.admin:
+    default: op
   rpg.*:
     children:
       rpg.npc
       rpg.group
       rpg.fake
       rpg.spy
-  fm.name: 
-   default: op
-  fm.send:
-   default: op
-  fm.npc:
-   default: op
-  fm.group:
-    default: op
-  fm.*: 
-   children:
-    fm.name
-    fm.send
-    fm.npc
-    fm.spy
+      rpg.admin

@@ -45,6 +45,20 @@ public class NPCControl {
         return(-1);
     }
 
+    public boolean alreadyExists(NPC npc){
+        String npcName = npc.getName().toLowerCase();
+        if (npcs.toString().toLowerCase().contains( npcName ))
+        {
+            for(int i = 0; i < listLength(); i++){
+                if ((getNPCName(i).toLowerCase()).equals( npcName )) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
     public boolean npcSwap(int indexOne, int indexTwo){
         if(validIndex(indexOne) && validIndex(indexTwo)){
             NPC first = npcs.get(indexOne);
