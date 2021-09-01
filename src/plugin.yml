@@ -32,6 +32,13 @@ commands:
     permission: rpg.npc
     aliases: [idg, groupm, groupreply, grouprr, gr]
     permission-message: §cSorry! You don't have permission to execute that command.
+  localmsg:
+    description: Sends a group a private message as an NPC
+    usage: |
+      /localmsg <npcName/npcID> <Player> <message>
+    permission: rpg.npc
+    aliases: [idl, localm, lm, pm, idp]
+    permission-message: §cSorry! You don't have permission to execute that command.
   role:
     description: Allows for Fake Name set for messaging and outloud chat
     usage: |
@@ -48,8 +55,9 @@ commands:
       /tmpmsg or /tm <NAME> <Player> <Text> - Messages a player using a temporary npc name
       /tmpsay or /ts <NAME> <Text> - Talks to public chat using a temporary npc name
       /tmplist or /tlist <Player> <Text> - Displays all curent temporary NPC names
+      /tmphelp - Displays All Commands
     permission: rpg.tmp
-    aliases: [tmpmsg, tm, tmpsay, ts, tmplist, tlist]
+    aliases: [tmpmsg, tm, tmpsay, ts, tmplist, tlist, fma, tma, tmphelp]
     permission-message: §cSorry! You don't have permission to execute that command.
   msg:
     description: Sends a player a private message
@@ -63,10 +71,10 @@ commands:
     description: Sends a private public (local) message
     usage: /pmsg <message>
     aliases: [lmsg, publicmessage, localmessage, lmessage, pmessage]
-  r:
+  reply:
     description: Quickly reply to a message
-    usage: /r <msg>
-    aliases: [er, reply, ereply]
+    usage: /reply <msg>
+    aliases: [r, er, reply, ereply]
   group:
     description: View and modify the server Groups
     usage: /group help
@@ -78,10 +86,12 @@ permsissions:
    default: op
   rpg.admin:
     default: op
+  rpg.group:
+    default: op
   rpg.*:
     children:
       rpg.npc
       rpg.group
-      rpg.fake
       rpg.spy
       rpg.admin
+      rpg.role
