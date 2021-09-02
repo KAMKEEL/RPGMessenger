@@ -10,8 +10,9 @@ import org.bukkit.entity.Player;
 
 import static kamkeel.RPGMessenger.Util.MessageUtil.*;
 import static kamkeel.RPGMessenger.Util.MessageUtil.layoutString;
+import static kamkeel.RPGMessenger.RPGCommands.*;
 
-public class CommandTemp extends RPGCommands implements CommandDefault {
+public class CommandTemp implements CommandDefault {
 
     // -------------------------------------------------| Temp Commands
     public void TempMSG(CommandSender sender, String label, String[] args){

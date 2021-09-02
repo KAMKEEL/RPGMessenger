@@ -17,10 +17,11 @@ public class RPGStringHelper {
     public static final String PUBLIC = "§e[#]§8 ";          // 3
     public static final String GROUP = "§3[G]§8 ";           // 4
     public static final String CONSOLE = "§4[C]§8 ";         // 5
+    public static final String ACTION = "§c[@]§8 ";         // 6
 
     // Illegal Symbols
     public static boolean hasIllegalSymbols(String input) {
-        String specialCharactersString = "!#$%*()'+,-./:;<=>?[]^_`{|}";
+        String specialCharactersString = "!#$%*()'+,-./:<=>?[]^_`{|}";
         for (int i = 0; i < input.length() ; i++)
         {
             char ch = input.charAt(i);

@@ -1,9 +1,6 @@
 package kamkeel.RPGMessenger;
 
-import kamkeel.RPGMessenger.Commands.CommandGroup;
-import kamkeel.RPGMessenger.Commands.CommandNPC;
-import kamkeel.RPGMessenger.Commands.CommandRole;
-import kamkeel.RPGMessenger.Commands.CommandTemp;
+import kamkeel.RPGMessenger.Commands.*;
 import kamkeel.RPGMessenger.Configs.ConfigGroup;
 import kamkeel.RPGMessenger.Configs.ConfigNPC;
 import kamkeel.RPGMessenger.Control.GroupControl;
@@ -25,12 +22,15 @@ import static kamkeel.RPGMessenger.Util.MessageUtil.*;
 
 public class RPGCommands {
 
-    protected static final RPGMessenger plugin = RPGMessenger.getPlugin(RPGMessenger.class);
+    public static final RPGMessenger plugin = RPGMessenger.getPlugin(RPGMessenger.class);
 
     private final CommandGroup groupCMD = new CommandGroup();
     private final CommandNPC npcCMD = new CommandNPC();
     private final CommandRole roleCMD = new CommandRole();
     private final CommandTemp tempCMD = new CommandTemp();
+    private final CommandRPG rpgCMD = new CommandRPG();
+    private final CommandRequest requestCMD = new CommandRequest();
+    private final CommandAction actionCMD = new CommandAction();
 
     // -------------------------------------------------| Hash Map Control
     // Type of Reply
@@ -44,6 +44,7 @@ public class RPGCommands {
     public static Map<String, NPC> roleNames = new HashMap<>();
     // Confirm Delete
     public static Map<String, String> deleteConfirm = new HashMap<>();
+    public static Map<String, String> requestConfirm = new HashMap<>();
     // -------------------------------------------------|
 
     // -------------------------------------------------| List Control
@@ -65,7 +66,7 @@ public class RPGCommands {
     public static ConfigGroup groupConfig;
 
     // -------------------------------------------------| Config Control
-    public void loadConfigs(){
+    public static void loadConfigs(){
 
         // Process NPCs Config
         npcConfig.setup();
@@ -206,6 +207,13 @@ public class RPGCommands {
     }
     // -------------------------------------------------|
 
+    public static boolean AdminPermission(CommandSender sender) {
+        if(!(sender instanceof Player)){
+            return true;
+        }
+        else return ((Player) sender).hasPermission("rpg.admin");
+    }
+
     public RPGCommands(){
         npcConfig = new ConfigNPC("npc");
         requestConfig = new ConfigNPC("request");
@@ -215,7 +223,16 @@ public class RPGCommands {
     }
 
     public boolean runCMD(CommandSender sender, Command cmd, String label, final String[] args) {
-        if (cmd.getName().equalsIgnoreCase("role")) {
+        if (cmd.getName().equalsIgnoreCase("rpg")) {
+            rpgCMD.runCMD(sender, label, args);
+        }
+        else if (cmd.getName().equalsIgnoreCase("request")) {
+            requestCMD.runCMD(sender, label, args);
+        }
+        else if (cmd.getName().equalsIgnoreCase("action")) {
+            actionCMD.runCMD(sender, label, args);
+        }
+        else if (cmd.getName().equalsIgnoreCase("role")) {
             roleCMD.runCMD(sender, label, args);
         }
         else if (cmd.getName().equalsIgnoreCase("tmp")) {

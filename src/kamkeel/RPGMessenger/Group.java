@@ -105,6 +105,35 @@ public class Group {
         return(-1);
     }
 
+    public int getPlayerIndex(String _name){
+        _name = convertToRawPlayer(_name).toLowerCase();
+        if (members.toString().toLowerCase().contains( _name ))
+        {
+
+            for(int i = 0; i < listLength(); i++){
+                Member current = getMember(i);
+                if(current.getIsPlayer()){
+                    if (   convertToRawPlayer(current.getDisplayName()).toLowerCase().startsWith( _name )) {
+                        return (i);
+                    }
+                }
+            }
+
+            for(int i = 0; i < listLength(); i++){
+                Member current = getMember(i);
+                if(current.getIsPlayer()){
+                    if (current.getName().toLowerCase().startsWith( _name )) {
+                        return (i);
+                    }
+                }
+            }
+
+            return(-1);
+        }
+
+        return(-1);
+    }
+
     public boolean validIndex(int index){
         return (listLength() > index && index > -1);
     }
@@ -148,7 +177,13 @@ public class Group {
     }
 
     public boolean removeMember(String target, boolean player){
-        int index = getIndex(target, player);
+        int index;
+        if(player){
+            index = getPlayerIndex(target);
+        }
+        else {
+            index = getIndex(target, false);
+        }
         if(index == -1){
             return false;
         }
@@ -183,7 +218,7 @@ public class Group {
 
     public boolean isGroupOwner(Player sender){
         if(listLength() > 0){
-            int index = getIndex(sender.getName(), true);
+            int index = getPlayerIndex(sender.getName());
             if(validIndex(index)){
                 return getMember(index).getType() == 2;
             }
@@ -194,7 +229,7 @@ public class Group {
 
     public boolean isGroupMod(Player sender){
         if(listLength() > 0){
-            int index = getIndex(sender.getName(), true);
+            int index = getPlayerIndex(sender.getName());
             if(validIndex(index)){
                 return getMember(index).getType() == 1;
             }
@@ -215,7 +250,7 @@ public class Group {
     }
 
     public boolean PromoteMember(String member){
-        int playerIndex = getIndex(member, true);
+        int playerIndex = getPlayerIndex(member);
         if(validIndex(playerIndex)){
             if(getMember(playerIndex).getType() == 0){
                 getMember(playerIndex).setType(1);
@@ -226,7 +261,7 @@ public class Group {
     }
 
     public boolean DemoteMember(String member){
-        int playerIndex = getIndex(member, true);
+        int playerIndex = getPlayerIndex(member);
         if(validIndex(playerIndex)){
             if(getMember(playerIndex).getType() == 1){
                 getMember(playerIndex).setType(0);
@@ -236,18 +271,16 @@ public class Group {
         return false;
     }
 
-    public boolean setOwner(String member){
-        int playerIndex = getIndex(member, true);
+    public void setOwner(String member){
+        int playerIndex = getPlayerIndex(member);
         if(validIndex(playerIndex)){
             if(getMember(playerIndex).getType() != 2){
                 getMember(0).setType(1);
                 getMember(playerIndex).setType(2);
                 memberSwap(0, playerIndex);
-                return true;
             }
         }
 
-        return false;
     }
 
 }

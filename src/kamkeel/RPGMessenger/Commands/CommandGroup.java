@@ -15,8 +15,9 @@ import java.util.List;
 import static kamkeel.RPGMessenger.Util.ColorConvert.*;
 import static kamkeel.RPGMessenger.Util.MessageUtil.*;
 import static kamkeel.RPGMessenger.Util.RPGStringHelper.*;
+import static kamkeel.RPGMessenger.RPGCommands.*;
 
-public class CommandGroup extends RPGCommands implements CommandDefault {
+public class CommandGroup implements CommandDefault {
 
     // -------------------------------------------------| Group Commands
     public boolean GroupCreate(CommandSender sender, String[] args){
@@ -31,6 +32,7 @@ public class CommandGroup extends RPGCommands implements CommandDefault {
                         if(sender instanceof Player){
                             if(!((Player)sender).hasPermission("rpg.admin")){
                                 groupControl.groups.get(groupControl.listLength() - 1).addPlayer(((Player)sender));
+                                groupControl.getGroup(groupControl.listLength() - 1).getMember(0).setType(2);
                             }
                             sendDebugMessage(sender, RPGStringHelper.GROUP + "§7Group: §c" + groupControl.groups.get(groupControl.listLength() - 1).getDisplayName() + "§7 with id §c" + groupControl.listLength() + "§7 created by " + ((Player)sender).getDisplayName());
                         }
@@ -203,13 +205,13 @@ public class CommandGroup extends RPGCommands implements CommandDefault {
             }
             if (index > -1 && groupControl.validIndex(index)) {
                 if(groupControl.hasEditPermission(index, sender, true)){
-                    int memberID = groupControl.getGroup(index).getIndex(args[2], true);
+                    int memberID = groupControl.getGroup(index).getPlayerIndex(args[2]);
                     if(memberID != -1){
                         Member member = groupControl.getGroup(index).getMember(memberID);
                         groupControl.getGroup(index).setOwner(member.getName());
 
                         sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4You have lost ownership to " + "§7Group: §c" + groupControl.getGroupDisplayName(index));
-                        sendGroupMessage(sender, index,RPGStringHelper.COLOR_TAG + member.getDisplayName() + "§7 has been promoted to Owner for " + "§7Group: §c" + groupControl.getGroupDisplayName(index) );
+                        sendGroupMessage(sender, index,RPGStringHelper.COLOR_TAG + member.getDisplayName() + "§7 has been promoted to Owner for " + "§eGroup: §c" + groupControl.getGroupDisplayName(index) );
                         return true;
                     }
                     else {
@@ -240,21 +242,26 @@ public class CommandGroup extends RPGCommands implements CommandDefault {
             }
             if (index > -1 && groupControl.validIndex(index)) {
                 if(groupControl.hasEditPermission(index, sender, true)){
-                    int memberID = groupControl.getGroup(index).getIndex(args[2], true);
+                    int memberID = groupControl.getGroup(index).getPlayerIndex(args[2]);
                     if(memberID != -1){
                         Member member = groupControl.getGroup(index).getMember(memberID);
-                        if(member.getType() == 0){
-                            if(groupControl.getGroup(index).PromoteMember(member.getName())){
-                                sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4You have promoted " + member.getDisplayName() + " to Mod in " + "§7Group: §c" + groupControl.getGroupDisplayName(index));
-                                sendGroupMessage(sender, index,RPGStringHelper.COLOR_TAG + member.getDisplayName() + "§7 has been promoted to Mod in " + "§7Group: §c" + groupControl.getGroupDisplayName(index) );
-                                return true;
+                        if(member.getIsPlayer()){
+                            if(member.getType() == 0){
+                                if(groupControl.getGroup(index).PromoteMember(member.getName())){
+                                    sender.sendMessage(RPGStringHelper.COLOR_TAG + "§cYou have promoted " + member.getDisplayName() + " §cto Mod in " + "§7Group: §c" + groupControl.getGroupDisplayName(index));
+                                    sendGroupMessage(sender, index,RPGStringHelper.COLOR_TAG + member.getDisplayName() + "§7 has been promoted to Mod in " + "§7Group: §c" + groupControl.getGroupDisplayName(index) );
+                                    return true;
+                                }
+                                else {
+                                    sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Error with Promoting Player");
+                                }
                             }
                             else {
-                                sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Error with Promoting Player");
+                                sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4You cannot promote a Player with Owner or Mod");
                             }
                         }
                         else {
-                            sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4You cannot promote a Player with Owner or Mod");
+                            sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4You cannot promote an NPC to Mod");
                         }
                     }
                     else {
@@ -284,20 +291,25 @@ public class CommandGroup extends RPGCommands implements CommandDefault {
             }
             if (index > -1 && groupControl.validIndex(index)) {
                 if(groupControl.hasEditPermission(index, sender, true)){
-                    int memberID = groupControl.getGroup(index).getIndex(args[2], true);
+                    int memberID = groupControl.getGroup(index).getPlayerIndex(args[2]);
                     if(memberID != -1){
                         Member member = groupControl.getGroup(index).getMember(memberID);
-                        if(member.getType() == 1){
-                            if(groupControl.getGroup(index).DemoteMember(member.getName())){
-                                sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4You have demoted " + member.getDisplayName() + " to Mod in " + "§7Group: §c" + groupControl.getGroupDisplayName(index));
-                                sendGroupMessage(sender, index,RPGStringHelper.COLOR_TAG + member.getDisplayName() + "§7 has been demoted to Member in " + "§7Group: §c" + groupControl.getGroupDisplayName(index) );
+                        if(member.getIsPlayer()){
+                            if(member.getType() == 1){
+                                if(groupControl.getGroup(index).DemoteMember(member.getName())){
+                                    sender.sendMessage(RPGStringHelper.COLOR_TAG + "§cYou have demoted " + member.getDisplayName() + " §cto Mod in " + "§7Group: §c" + groupControl.getGroupDisplayName(index));
+                                    sendGroupMessage(sender, index,RPGStringHelper.COLOR_TAG + member.getDisplayName() + "§7 has been demoted to Member in " + "§7Group: §c" + groupControl.getGroupDisplayName(index) );
+                                }
+                                else {
+                                    sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Error with Demoting Player");
+                                }
                             }
                             else {
-                                sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Error with Demoting Player");
+                                sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4You cannot promote a Player without Mod or the Owner");
                             }
                         }
                         else {
-                            sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4You cannot promote a Player without Mod or the Owner");
+                            sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4You cannot demote an NPC");
                         }
                     }
                     else {
@@ -337,10 +349,8 @@ public class CommandGroup extends RPGCommands implements CommandDefault {
                         }
                         else if(groupControl.getGroup(index).addPlayer(target)){
                             sender.sendMessage(RPGStringHelper.COLOR_TAG + "§7Added §cPlayer: " + target.getDisplayName() + "§7 to " + "§7Group: §c" + groupControl.getGroupDisplayName(index));
-                            target.sendMessage(RPGStringHelper.COLOR_TAG + "§6You"+ "§7 have been added to " + "§7Group: §c" + groupControl.getGroupDisplayName(index));
 
                             sendGroupMessage(sender, index,RPGStringHelper.COLOR_TAG + target.getDisplayName() + "§7 has been added to " + "§7Group: §c" + groupControl.getGroupDisplayName(index) );
-
                             updateGroupConfig(index);
                             return true;
                         }
@@ -355,7 +365,6 @@ public class CommandGroup extends RPGCommands implements CommandDefault {
                                 sender.sendMessage(RPGStringHelper.COLOR_TAG + "§7Added §2NPC: " + npcControl.getNPCDisplayName(findNPC) + "§7 to " + "§7Group: §c" + groupControl.getGroupDisplayName(index));
 
                                 sendGroupMessage(sender, index,RPGStringHelper.COLOR_TAG + npcControl.getNPCDisplayName(findNPC) + "§7 has been added to " + "§7Group: §c" + groupControl.getGroupDisplayName(index) );
-
                                 updateGroupConfig(index);
                                 return true;
                             }
@@ -397,7 +406,7 @@ public class CommandGroup extends RPGCommands implements CommandDefault {
                 if(groupControl.hasEditPermission(index, sender, false)){
                     String member = args[2];
 
-                    int getMemberIndex = groupControl.getGroup(index).getIndex(member, true);
+                    int getMemberIndex = groupControl.getGroup(index).getPlayerIndex(member);
                     if(getMemberIndex == -1) {
                         getMemberIndex = groupControl.getGroup(index).getIndex(member, false);
                     }

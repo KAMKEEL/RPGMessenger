@@ -14,9 +14,9 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 import static kamkeel.RPGMessenger.Util.ColorConvert.convertToRaw;
-import static kamkeel.RPGMessenger.Util.RPGStringHelper.hasIllegalSymbols;
+import static kamkeel.RPGMessenger.RPGCommands.*;
 
-public class CommandNPC extends RPGCommands implements CommandDefault {
+public class CommandNPC implements CommandDefault {
 
     // -------------------------------------------------| NPC Commands
     public void NpcID(CommandSender sender, String label, String[] args){
@@ -231,6 +231,22 @@ public class CommandNPC extends RPGCommands implements CommandDefault {
         }
         return false;
     }
+    public boolean NpcSort(CommandSender sender){
+        NPC temp;
+        for (int i = 0; i < npcControl.listLength(); i++) {
+            for (int j = i + 1; j < npcControl.listLength(); j++) {
+
+                if (npcControl.getNPCName(i).compareTo(npcControl.getNPCName(j)) > 0) {
+                    // Swap
+                    temp = npcControl.getNPC(i);
+                    npcControl.npcs.set(i, npcControl.getNPC(j));
+                    npcControl.npcs.set(j, temp);
+                }
+            }
+        }
+        sender.sendMessage(RPGStringHelper.COLOR_TAG +  "§cSorted all NPCs");
+        return true;
+    }
     public void NpcHelp(CommandSender sender){
         sender.sendMessage("§8|-------------- §aNPC Help §8--------------|");
         sender.sendMessage("§8| §2/npcid    §8>> §7Checks NPC IDs");
@@ -240,6 +256,7 @@ public class CommandNPC extends RPGCommands implements CommandDefault {
         sender.sendMessage("§8| §2/npc remove      §8>> §7Delete an NPC");
         sender.sendMessage("§8| §2/npc list      §8>> §7List all permanent NPCs");
         sender.sendMessage("§8| §2/npc clear      §8>> §7Clear all permanent NPCs");
+        sender.sendMessage("§8| §2/npc sort      §8>> §7Sort All NPCs");
         sender.sendMessage("§8|--------------------------------------|");
     }
     // -------------------------------------------------|
@@ -271,6 +288,9 @@ public class CommandNPC extends RPGCommands implements CommandDefault {
             }
             else if (args[0].equalsIgnoreCase("confirmclear")){
                 saveNPC = NpcConfirm(sender);
+            }
+            else if (args[0].equalsIgnoreCase("sort")){
+                saveNPC = NpcSort(sender);
             }
             else if (args[0].equalsIgnoreCase("help")){
                 NpcHelp(sender);

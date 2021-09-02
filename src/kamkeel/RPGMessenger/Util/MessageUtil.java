@@ -37,10 +37,10 @@ public class MessageUtil {
     // -------------------------------------------------|
 
 
-    // 0: Message, 1: NPC, 2: Player, 3: Public, 4: Group, 5: Console
+    // 0: Message, 1: NPC, 2: Player, 3: Public, 4: Group, 5: Console, 6: Action
     public static String[] spyTags = {RPGStringHelper.MESSAGE, RPGStringHelper.NPC,
             RPGStringHelper.PLAYER, RPGStringHelper.PUBLIC, RPGStringHelper.GROUP,
-            RPGStringHelper.CONSOLE};
+            RPGStringHelper.CONSOLE, RPGStringHelper.ACTION};
 
     // Format Spy Message
     public static String getSpyFormat(int tag, String from, String to, String chat){
@@ -54,6 +54,9 @@ public class MessageUtil {
     }
     public static String getSpyGroupFormat(int tag, String groupOPTag, String from, String chat){
         return spyTags[tag] + "§8[§6" + groupOPTag + "§8] §6" + from + "§7: §r" + chat;
+    }
+    public static String getSpyActionFormat(String playerDisplay, String chat){
+        return spyTags[6] + "§8[§6" + playerDisplay + "§8] §r" + chat;
     }
 
     // Format Chat Message

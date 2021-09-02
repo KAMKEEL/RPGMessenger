@@ -12,9 +12,9 @@ import org.bukkit.entity.Player;
 import static kamkeel.RPGMessenger.Util.ColorConvert.convertColor;
 import static kamkeel.RPGMessenger.Util.ColorConvert.convertSpace;
 import static kamkeel.RPGMessenger.Util.MessageUtil.*;
-import static kamkeel.RPGMessenger.Util.MessageUtil.formMessage;
+import static kamkeel.RPGMessenger.RPGCommands.*;
 
-public class CommandRole extends RPGCommands implements CommandDefault {
+public class CommandRole implements CommandDefault {
 
     // -------------------------------------------------| Role Commands
     public void RoleName(CommandSender sender, String[] args){

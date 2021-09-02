@@ -16,6 +16,13 @@ commands:
     aliases: npcid
     permission: rpg.npc
     permission-message: §cSorry! You don't have permission to execute that command.
+  action:
+    description: Sends a global message
+    usage: |
+      /action help
+    permission: rpg.npc
+    aliases: [actionsay, as, cbm]
+    permission-message: §cSorry! You don't have permission to execute that command.
   npcmsg:
     description: Sends a player a private message
     usage: |
@@ -79,6 +86,14 @@ commands:
     description: View and modify the server Groups
     usage: /group help
     aliases: group
+  rpg:
+    description: View RPG Commands
+    usage: /rpg help
+    aliases: rpg
+  request:
+    description: View request Commands
+    usage: /request help
+    aliases: request
 permsissions:
   rpg.npc:
     default: op
