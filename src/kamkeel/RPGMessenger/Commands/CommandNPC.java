@@ -15,6 +15,7 @@ import java.util.List;
 
 import static kamkeel.RPGMessenger.Util.ColorConvert.convertToRaw;
 import static kamkeel.RPGMessenger.RPGCommands.*;
+import static kamkeel.RPGMessenger.Util.ColorConvert.removeSpace;
 
 public class CommandNPC implements CommandDefault {
 
@@ -236,7 +237,7 @@ public class CommandNPC implements CommandDefault {
         for (int i = 0; i < npcControl.listLength(); i++) {
             for (int j = i + 1; j < npcControl.listLength(); j++) {
 
-                if (npcControl.getNPCName(i).compareTo(npcControl.getNPCName(j)) > 0) {
+                if ( removeSpace(npcControl.getNPCName(i)).compareTo(removeSpace(npcControl.getNPCName(j))) > 0) {
                     // Swap
                     temp = npcControl.getNPC(i);
                     npcControl.npcs.set(i, npcControl.getNPC(j));
