@@ -21,8 +21,8 @@ public class ConfigNPC {
     }
 
     // Files & File Configs Here
-    public static FileConfiguration config;
-    public static  File file;
+    public FileConfiguration config;
+    public File file;
 
     public void setup() {
         if (!plugin.getDataFolder().exists()) {

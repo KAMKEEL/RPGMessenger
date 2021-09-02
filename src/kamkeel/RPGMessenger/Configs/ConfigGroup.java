@@ -24,7 +24,7 @@ public class ConfigGroup {
     private static final RPGMessenger plugin = RPGMessenger.getPlugin(RPGMessenger.class);
 
     // Folder Control
-    public static  File folderFile;
+    public static File folderFile;
 
     // --------------------------
     // Files & File Configs Here
