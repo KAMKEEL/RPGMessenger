@@ -13,9 +13,8 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-import static kamkeel.RPGMessenger.Util.ColorConvert.convertToRaw;
 import static kamkeel.RPGMessenger.RPGCommands.*;
-import static kamkeel.RPGMessenger.Util.ColorConvert.removeSpace;
+import static kamkeel.RPGMessenger.Util.ColorConvert.*;
 
 public class CommandNPC implements CommandDefault {
 
@@ -34,7 +33,7 @@ public class CommandNPC implements CommandDefault {
                 sender.sendMessage(RPGStringHelper.COLOR_TAG + "§cCouldn't find NPC§4 " + convertToRaw(args[1]));
             }
         }
-        if(args.length == 1 && label.equalsIgnoreCase("npcid")){
+        else if(args.length == 1 && label.equalsIgnoreCase("npcid")){
             String givenName = convertToRaw(args[0]).toLowerCase();
             if (npcControl.toString().toLowerCase().contains(givenName))
             {
@@ -233,18 +232,20 @@ public class CommandNPC implements CommandDefault {
         return false;
     }
     public boolean NpcSort(CommandSender sender){
-        NPC temp;
-        for (int i = 0; i < npcControl.listLength(); i++) {
-            for (int j = i + 1; j < npcControl.listLength(); j++) {
 
-                if ( removeSpace(npcControl.getNPCName(i)).compareTo(removeSpace(npcControl.getNPCName(j))) > 0) {
-                    // Swap
-                    temp = npcControl.getNPC(i);
-                    npcControl.npcs.set(i, npcControl.getNPC(j));
-                    npcControl.npcs.set(j, temp);
-                }
+        // Insertion Sort
+        int n = npcControl.listLength();
+        for (int i = 1; i < n; ++i) {
+            NPC key = npcControl.getNPC(i);
+            int j = i - 1;
+
+            while (j >= 0 && ((npcControl.getNPCName(j)).toLowerCase()).compareTo(key.getName().toLowerCase()) > 0 ){
+                npcControl.npcs.set(j+1, npcControl.getNPC(j));
+                j = j - 1;
             }
+            npcControl.npcs.set(j + 1, key);
         }
+
         sender.sendMessage(RPGStringHelper.COLOR_TAG +  "§cSorted all NPCs");
         return true;
     }

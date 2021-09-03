@@ -38,6 +38,11 @@ public class ColorConvert {
         return s;
     }
 
+    public static String deleteSpace(String s){
+        s = s.replace(" ", "");
+        return s;
+    }
+
     public static String convertColor(String s){
         // Convert Lower Colors
         for(int i = 0; i < colorCodesLower.length; i++){
