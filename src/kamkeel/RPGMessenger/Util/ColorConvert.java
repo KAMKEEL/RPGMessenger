@@ -66,12 +66,9 @@ public class ColorConvert {
     public static String convertColorSign(String s){ return s.replace("§", "&"); }
 
     public static String convertToRawPlayer(String s){
-        return removeSpace(removeColorCodes(convertColorSign(s)));
+        return deleteSpace(removeSpace(removeColorCodes(convertColorSign(s))));
     }
 
-    public static String convertToRawNPC(String s){
-        return deleteSpace(removeColorCodes(convertColorSign(s)));
-    }
 
     public static String convertToSaveNPC(String s){
         // Convert Space
