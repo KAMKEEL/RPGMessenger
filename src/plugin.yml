@@ -1,7 +1,7 @@
 name: RPGMessenger
 author: KAMKEEL
 main: kamkeel.RPGMessenger.RPGMessenger
-version: 1.0
+version: 1.1
 description: RPG Messenger | A plugin to allow NPC, Fake Names and Broadcast Messengening for RPG Servers
 commands:
   npc:

@@ -512,7 +512,7 @@ public class RPGCommands {
                                 }
 
                                 Player target = findPlayer(reply.get(sender.getName()));
-                                String baseName = convertToRaw(convertToRawPlayer(reply.get(sender.getName()))).toLowerCase();
+                                String baseName = convertToRawNPC(reply.get(sender.getName())).toLowerCase();
 
                                 if(target != null){
                                     if(sender instanceof Player){
@@ -594,7 +594,11 @@ public class RPGCommands {
 
                                 allArgs = layoutString(1, args);
                                 String npcName = reply.get(target.getName());
-                                String baseName = convertToRaw(convertToRawPlayer(npcName)).toLowerCase();
+                                String baseName = convertToRawNPC(npcName).toLowerCase();
+
+                                System.out.println(npcName);
+                                System.out.println(baseName);
+                                System.out.println(requestControl.toString().toLowerCase());
 
                                 if (reply.get(target.getName()).equals("CONSOLE")) {
                                     sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Error: §cYou cannot reply as CONSOLE");
@@ -776,7 +780,7 @@ public class RPGCommands {
 
                                 allArgs = layoutString(1, args);
                                 String groupReplyName = groupNPC.get(groupControl.getGroupName(index));
-                                String baseName = convertToRaw(convertToRawPlayer(groupReplyName)).toLowerCase();
+                                String baseName = convertToRawNPC(groupReplyName).toLowerCase();
 
                                 if (groupReplyName.equals("CONSOLE")) {
                                     sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Error: §cYou cannot reply as CONSOLE");

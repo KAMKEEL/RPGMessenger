@@ -69,6 +69,10 @@ public class ColorConvert {
         return removeSpace(removeColorCodes(convertColorSign(s)));
     }
 
+    public static String convertToRawNPC(String s){
+        return deleteSpace(removeColorCodes(convertColorSign(s)));
+    }
+
     public static String convertToSaveNPC(String s){
         // Convert Space
         s = s.replace(" ", ";");

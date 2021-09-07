@@ -28,7 +28,7 @@ public class RPGMessenger extends org.bukkit.plugin.java.JavaPlugin implements o
 
     public void onEnable() {
         System.out.println("------By Kam------");
-        System.out.println("[RPG] V 1.0");
+        System.out.println("[RPG] V 1.1");
         System.out.println("------------------");
         getServer().getPluginManager().registerEvents(this, this);
 
