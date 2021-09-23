@@ -1,7 +1,6 @@
 package kamkeel.RPGMessenger.Commands;
 
 import kamkeel.RPGMessenger.NPC;
-import kamkeel.RPGMessenger.RPGCommands;
 import kamkeel.RPGMessenger.Util.CommandDefault;
 import kamkeel.RPGMessenger.Util.RPGStringHelper;
 import org.bukkit.Bukkit;
@@ -21,23 +20,26 @@ public class CommandTemp implements CommandDefault {
             Player target = findPlayer(args[1]);
             if(target != null){
                 NPC tempNPC = new NPC(args[0]);
-                if(tempControl.alreadyExists(tempNPC)){
-                    tempNPC = tempControl.getNPC(tempControl.npcIndex(args[0]));
+
+                int tempIndex = tempControl.npcExactIndex( tempNPC );
+
+                if(tempIndex != -1){
+                    tempNPC = tempControl.getNPC(tempIndex);
                 }
                 else{
                     tempControl.npcAdd(tempNPC);
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                        public void run() {
+                            tempControl.npcRemove(args[0]);
+                        }
+                    }, 1200 * plugin.getConfig().getInt("Time"));
                 }
+
                 String allArgs = layoutString(2, args);
 
                 Bukkit.getConsoleSender().sendMessage(getSpyFormat(1, tempNPC.getDisplayName(), target.getDisplayName(), allArgs));
                 formMessage(target, tempNPC.getDisplayName(), true, allArgs);
                 sendSpyMessage(sender, 1, true, tempNPC.getDisplayName(), target.getDisplayName(), allArgs);
-
-                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                    public void run() {
-                        tempControl.npcRemove(args[0]);
-                    }
-                }, 1200 * plugin.getConfig().getInt("Time"));
 
                 setReply(target.getName(), tempNPC.getDisplayName(), 0);
             }
@@ -49,24 +51,110 @@ public class CommandTemp implements CommandDefault {
             sender.sendMessage(RPGStringHelper.COLOR_TAG + "§c/" + label + " §6NewName §ePlayer §7Message");
         }
     }
+    public void TempLocal(CommandSender sender, String label, String[] args){
+        // /tmplocal CustomName(0) Player(1) MSG(2)
+        if(args.length > 2){
+            Player target = findPlayer(args[1]);
+            if(target != null){
+                NPC tempNPC = new NPC(args[0]);
+
+                int tempIndex = tempControl.npcExactIndex( tempNPC );
+
+                if(tempIndex != -1){
+                    tempNPC = tempControl.getNPC(tempIndex);
+                }
+                else{
+                    tempControl.npcAdd(tempNPC);
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                        public void run() {
+                            tempControl.npcRemove(args[0]);
+                        }
+                    }, 1200 * plugin.getConfig().getInt("Time"));
+                }
+
+                String allArgs = layoutString(2, args);
+
+                Bukkit.getConsoleSender().sendMessage(getSpyLocalFormat(true, target.getDisplayName(), tempNPC.getDisplayName(), allArgs));
+                sendSpyLocalMessage(sender, true, target.getDisplayName(), tempNPC.getDisplayName(), allArgs);
+
+                formLocalMessage(target, tempNPC.getDisplayName(), true, allArgs);
+
+                setReply(target.getName(), tempNPC.getDisplayName(), 1);
+            }
+            else{
+                sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Could not find player!");
+            }
+        }
+        else{
+            sender.sendMessage(RPGStringHelper.COLOR_TAG + "§c/" + label + " §6NewName §ePlayer §7Message");
+        }
+    }
+    public void TempGroup(CommandSender sender, String label, String[] args){
+        // /tmpgroup CustomName(0) Group(1) MSG(2)
+        if(args.length > 2) {
+            int groupIndex;
+            try {
+                groupIndex = Integer.parseInt(args[1]) - 1;
+            } catch (NumberFormatException iobe) {
+                groupIndex = groupControl.groupIndex(args[1]);
+            }
+
+            if (groupIndex > -1 && groupControl.validIndex(groupIndex)) {
+
+                String allArgs = layoutString(2, args);
+                NPC tempNPC = new NPC(args[0]);
+
+                int tempIndex = tempControl.npcExactIndex( tempNPC );
+
+                if(tempIndex != -1){
+                    tempNPC = tempControl.getNPC(tempIndex);
+                }
+                else{
+                    tempControl.npcAdd(tempNPC);
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                        public void run() {
+                            tempControl.npcRemove(args[0]);
+                        }
+                    }, 1200 * plugin.getConfig().getInt("Time"));
+                }
+
+                Bukkit.getConsoleSender().sendMessage(getSpyGroupFormat(1, groupControl.getGroupOpDisplayTag(groupIndex), tempNPC.getDisplayName(), allArgs));
+                sendGroupMessage(sender, groupIndex, formGroupMessage(tempNPC.getDisplayName(), groupControl.getGroupDisplayTag(groupIndex), true, allArgs));
+                sendSpyGroupMessage(sender, groupIndex, 1, true, groupControl.getGroupOpDisplayTag(groupIndex), tempNPC.getDisplayName(), allArgs);
+
+                setGroupReply(groupControl.getGroup(groupIndex), tempNPC.getDisplayName(),  true);
+
+            }
+            else {
+                sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Couldn't find group!");
+            }
+        }
+        else{
+            sender.sendMessage(RPGStringHelper.COLOR_TAG + "§c/" + label + " §6NewName §eGroup §7Message");
+        }
+    }
     public void TempSay(CommandSender sender, String label, String[] args){
         // /tmpsay CustomName(0) MSG(1)
         if(args.length > 1){
             NPC tempNPC = new NPC(args[0]);
-            if(tempControl.alreadyExists(tempNPC)){
-                tempNPC = tempControl.getNPC(tempControl.npcIndex(args[0]));
+
+            int tempIndex = tempControl.npcExactIndex( tempNPC );
+
+            if(tempIndex != -1){
+                tempNPC = tempControl.getNPC(tempIndex);
             }
             else{
                 tempControl.npcAdd(tempNPC);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                    public void run() {
+                        tempControl.npcRemove(args[0]);
+                    }
+                }, 1200 * plugin.getConfig().getInt("Time"));
             }
+
             String allArgs = layoutString(1, args);
 
             Bukkit.broadcastMessage("§8<§6"+ tempNPC.getDisplayName() + "§8> §f" + allArgs);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                public void run() {
-                    tempControl.npcRemove(args[0]);
-                }
-            }, 1200 * plugin.getConfig().getInt("Time"));
 
         }
         else{
@@ -116,9 +204,11 @@ public class CommandTemp implements CommandDefault {
     }
     public void TempHelp(CommandSender sender){
         sender.sendMessage("§8|-------------- §6Temp Help §8--------------|");
-        sender.sendMessage("§8| §e/tmpmsg         §8>> §7Send a MSG as a Temporary NPC");
-        sender.sendMessage("§8| §e/tmpsay         §8>> §7Send a CHAT as a Temporary NPC");
-        sender.sendMessage("§8| §e/tmplist      §8>> §7List All Temporary NPCs");
+        sender.sendMessage("§8| §e/tmpmsg        §8>> §7Send a MSG as a Temporary NPC");
+        sender.sendMessage("§8| §e/tmpgroup      §8>> §7Send a MSG as a Temporary NPC to Group");
+        sender.sendMessage("§8| §e/tmplocal      §8>> §7Send a MSG as a Temporary NPC to Local");
+        sender.sendMessage("§8| §e/tmpsay        §8>> §7Send a CHAT as a Temporary NPC");
+        sender.sendMessage("§8| §e/tmplist       §8>> §7List All Temporary NPCs");
         sender.sendMessage("§8|--------------------------------------|");
     }
     // -------------------------------------------------|
@@ -126,10 +216,22 @@ public class CommandTemp implements CommandDefault {
     @Override
     public void runCMD(CommandSender sender, String label, String[] args) {
         if(label.equalsIgnoreCase("tmpmsg") || label.equalsIgnoreCase("tm")
-                || label.equalsIgnoreCase("fma") || label.equalsIgnoreCase("tma")) {
+                || label.equalsIgnoreCase("fma") || label.equalsIgnoreCase("tma")
+                || label.equalsIgnoreCase("tidm")) {
             TempMSG(sender, label, args);
         }
-        else if(label.equalsIgnoreCase("tmpsay") || label.equalsIgnoreCase("ts")){
+        else if(label.equalsIgnoreCase("tmpgroup") || label.equalsIgnoreCase("tidg")
+                || label.equalsIgnoreCase("tga")) {
+            TempGroup(sender, label, args);
+        }
+        else if(label.equalsIgnoreCase("tmplocal") || label.equalsIgnoreCase("tl")
+                || label.equalsIgnoreCase("lma") || label.equalsIgnoreCase("tla")
+                || label.equalsIgnoreCase("tidl") || label.equalsIgnoreCase("tidp")
+                || label.equalsIgnoreCase("tmppublic")) {
+            TempLocal(sender, label, args);
+        }
+        else if(label.equalsIgnoreCase("tmpsay") || label.equalsIgnoreCase("ts")
+                || label.equalsIgnoreCase("tsa")){
             TempSay(sender, label, args);
         }
         else if(label.equalsIgnoreCase("tmplist") || label.equalsIgnoreCase("tlist")){

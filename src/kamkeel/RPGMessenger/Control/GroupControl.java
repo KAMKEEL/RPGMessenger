@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 import static kamkeel.RPGMessenger.Util.ColorConvert.convertToRaw;
+import static kamkeel.RPGMessenger.Util.ColorConvert.convertToRawPlayer;
 
 public class GroupControl {
 

@@ -45,6 +45,21 @@ public class NPCControl {
         return(-1);
     }
 
+    public int npcExactIndex(NPC npc){
+        String npcDisplay = npc.getDisplayName().toLowerCase();
+        String npcName = npc.getName().toLowerCase();
+        if (npcs.toString().toLowerCase().contains( npcName ))
+        {
+            for(int i = 0; i < listLength(); i++){
+                if ( (getNPCDisplayName(i).toLowerCase()).equals( npcDisplay ) && (getNPCName(i).toLowerCase()).equals( npcName )) {
+                    return (i);
+                }
+            }
+            return(-1);
+        }
+        return(-1);
+    }
+
     public boolean alreadyExists(NPC npc){
         String npcName = npc.getName().toLowerCase();
         if (npcs.toString().toLowerCase().contains( npcName ))

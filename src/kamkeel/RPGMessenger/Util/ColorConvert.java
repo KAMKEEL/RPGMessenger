@@ -60,7 +60,7 @@ public class ColorConvert {
     }
 
     public static String convertToRaw(String s){
-        return removeSpace(removeColorCodes(s));
+        return deleteSpace(removeSpace(removeColorCodes(s)));
     }
 
     public static String convertColorSign(String s){ return s.replace("§", "&"); }

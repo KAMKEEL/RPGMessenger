@@ -596,10 +596,6 @@ public class RPGCommands {
                                 String npcName = reply.get(target.getName());
                                 String baseName = convertToRawPlayer(npcName).toLowerCase();
 
-                                System.out.println(npcName);
-                                System.out.println(baseName);
-                                System.out.println(requestControl.toString().toLowerCase());
-
                                 if (reply.get(target.getName()).equals("CONSOLE")) {
                                     sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Error: §cYou cannot reply as CONSOLE");
                                 }

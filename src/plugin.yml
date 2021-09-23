@@ -60,11 +60,13 @@ commands:
     description: Allows for Fake Name set for messaging and outloud chat
     usage: |
       /tmpmsg or /tm <NAME> <Player> <Text> - Messages a player using a temporary npc name
+      /tmpgroup or /tg <NAME> <Group> <Text> - Messages a Group using a temporary npc name
+      /tmplocal or /tl <NAME> <Player> <Text> - Messages a player local using a temporary npc name
       /tmpsay or /ts <NAME> <Text> - Talks to public chat using a temporary npc name
       /tmplist or /tlist <Player> <Text> - Displays all curent temporary NPC names
       /tmphelp - Displays All Commands
     permission: rpg.tmp
-    aliases: [tmpmsg, tm, tmpsay, ts, tmplist, tlist, fma, tma, tmphelp]
+    aliases: [tmpmsg, tm, fma, tma, tidm, tmplocal, tl, lma, tla, tidl, tidp, tmpgroup, tidg, tga, tmppublic, tmpsay, ts, tsa, tmplist, tlist, tmphelp]
     permission-message: §cSorry! You don't have permission to execute that command.
   msg:
     description: Sends a player a private message
