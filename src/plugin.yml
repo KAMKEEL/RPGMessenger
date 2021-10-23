@@ -1,7 +1,7 @@
 name: RPGMessenger
 author: KAMKEEL
 main: kamkeel.RPGMessenger.RPGMessenger
-version: 1.1
+version: 1.2
 description: RPG Messenger | A plugin to allow NPC, Fake Names and Broadcast Messengening for RPG Servers
 commands:
   npc:
@@ -26,7 +26,7 @@ commands:
   npcmsg:
     description: Sends a player a private message
     usage: |
-      /npcmsg <npcName/npcID> <player> <message>
+      /npcmsg <player> <npcName/npcID>  <message>
       /npcreply <player> <message>
     permission: rpg.npc
     aliases: [idm, nms, nm, npcm, npcreply, npcr, nr, npcsay, npcs, ns]
@@ -34,7 +34,7 @@ commands:
   groupmsg:
     description: Sends a group a private message as an NPC
     usage: |
-      /groupmsg <npcName/npcID> <groupName..Tag..ID> <message>
+      /groupmsg <groupName..Tag..ID> <npcName/npcID> <message>
       /groupreply <groupName..Tag..ID> <message>
     permission: rpg.npc
     aliases: [idg, groupm, groupreply, grouprr, gr]
@@ -42,7 +42,7 @@ commands:
   localmsg:
     description: Sends a group a private message as an NPC
     usage: |
-      /localmsg <npcName/npcID> <Player> <message>
+      /localmsg <Player> <npcName/npcID> <message>
     permission: rpg.npc
     aliases: [idl, localm, lm, pm, idp]
     permission-message: §cSorry! You don't have permission to execute that command.

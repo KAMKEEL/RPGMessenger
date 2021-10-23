@@ -691,19 +691,21 @@ public class RPGCommands {
                 }
             }
             else{
-                // npcmsg NPC/ID (0) Player (1) chat (2)
+                // npcmsg Player (0) NPC/ID (1) chat (2)
                 if (args.length > 2) {
 
-                    int index;
-                    try {
-                        index = Integer.parseInt(args[0]) - 1;
-                    } catch (NumberFormatException iobe) {
-                        index = npcControl.npcIndex(args[0]);
-                    }
+                    Player target = findPlayer(args[0]);
 
-                    if (npcControl.validIndex(index)) {
-                        Player target = findPlayer(args[1]);
-                        if (target != null) {
+                    if (target != null) {
+                        int index;
+                        try {
+                            index = Integer.parseInt(args[1]) - 1;
+                        } catch (NumberFormatException iobe) {
+                            index = npcControl.npcIndex(args[1]);
+                        }
+
+                        if (npcControl.validIndex(index)) {
+
                             NPC npc = npcControl.getNPC(index);
                             String allArgs = layoutString(2, args);
 
@@ -712,32 +714,34 @@ public class RPGCommands {
                             sendSpyMessage(sender, 1, true, npc.getDisplayName(), target.getDisplayName(), allArgs);
 
                             setReply(target.getName(), npc.getDisplayName(), 0);
-                        } else {
-                            sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Could not find player!");
                         }
-                    } else {
-                        sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Couldn't find NPC!");
+                        else {
+                            sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Couldn't find NPC!");
+                        }
+                    }
+                    else {
+                        sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Could not find player!");
                     }
                 }
                 else {
-                    sender.sendMessage(RPGStringHelper.COLOR_TAG + "§c/npcmsg §6ID/Name §ePlayer §7Message");
+                    sender.sendMessage(RPGStringHelper.COLOR_TAG + "§c/npcmsg §ePlayer §6ID/Name §7Message");
                 }
             }
         }
         else if (cmd.getName().equalsIgnoreCase("localmsg")) {
-            // /localmsg NPC (0) Player (1) Msg (2)
+            // /localmsg Player (0) NPC (1) Msg (2)
             if (args.length > 2) {
+                Player target = findPlayer(args[0]);
+                if (target != null) {
+                    int index;
+                    try {
+                        index = Integer.parseInt(args[1]) - 1;
+                    } catch (NumberFormatException iobe) {
+                        index = npcControl.npcIndex(args[1]);
+                    }
 
-                int index;
-                try {
-                    index = Integer.parseInt(args[0]) - 1;
-                } catch (NumberFormatException iobe) {
-                    index = npcControl.npcIndex(args[0]);
-                }
+                    if (npcControl.validIndex(index)) {
 
-                if (npcControl.validIndex(index)) {
-                    Player target = findPlayer(args[1]);
-                    if (target != null) {
                         NPC npc = npcControl.getNPC(index);
                         String allArgs = layoutString(2, args);
 
@@ -747,15 +751,17 @@ public class RPGCommands {
                         formLocalMessage(target, npcControl.getNPCDisplayName(index), true, allArgs);
 
                         setReply(target.getName(), npcControl.getNPCDisplayName(index), 1);
+
                     } else {
-                        sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Could not find player!");
+                        sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Couldn't find NPC!");
                     }
-                } else {
-                    sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Couldn't find NPC!");
+                }
+                else {
+                    sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Could not find player!");
                 }
             }
             else {
-                sender.sendMessage(RPGStringHelper.COLOR_TAG + "§c/localmsg §6ID/Name §ePlayer §7Message");
+                sender.sendMessage(RPGStringHelper.COLOR_TAG + "§c/localmsg §ePlayer §6ID/Name §7Message");
             }
         }
         else if (cmd.getName().equalsIgnoreCase("groupmsg")) {
@@ -812,27 +818,22 @@ public class RPGCommands {
                 }
             }
             else{
-                // groupmsg NPC/ID (0) GroupName (1) chat (2)
+                // groupmsg GroupName (0) NPC/ID (1) chat (2)
                 if (args.length > 2) {
-
-                    int npcIndex;
+                    int groupIndex;
                     try {
-                        npcIndex = Integer.parseInt(args[0]) - 1;
+                        groupIndex = Integer.parseInt(args[0]) - 1;
                     } catch (NumberFormatException iobe) {
-                        npcIndex = npcControl.npcIndex(args[0]);
+                        groupIndex = groupControl.groupIndex(args[0]);
                     }
-
-                    if (npcIndex > -1 && npcControl.validIndex(npcIndex)) {
-
-                        int groupIndex;
+                    if (groupIndex > -1 && groupControl.validIndex(groupIndex)) {
+                        int npcIndex;
                         try {
-                            groupIndex = Integer.parseInt(args[1]) - 1;
+                            npcIndex = Integer.parseInt(args[1]) - 1;
                         } catch (NumberFormatException iobe) {
-                            groupIndex = groupControl.groupIndex(args[1]);
+                            npcIndex = npcControl.npcIndex(args[1]);
                         }
-
-                        if (groupIndex > -1 && groupControl.validIndex(groupIndex)) {
-
+                        if (npcIndex > -1 && npcControl.validIndex(npcIndex)) {
                             NPC npc = npcControl.getNPC(npcIndex);
                             String allArgs = layoutString(2, args);
 
@@ -841,16 +842,17 @@ public class RPGCommands {
                             sendSpyGroupMessage(sender, groupIndex, 1, true, groupControl.getGroupOpDisplayTag(groupIndex), npc.getDisplayName(), allArgs);
 
                             setGroupReply(groupControl.getGroup(groupIndex), npc.getDisplayName(),  true);
+
+                        } else {
+                            sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Couldn't find NPC!");
                         }
-                        else {
-                            sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Couldn't find group!");
-                        }
-                    } else {
-                        sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Couldn't find NPC!");
+                    }
+                    else {
+                        sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Couldn't find group!");
                     }
                 }
                 else {
-                    sender.sendMessage(RPGStringHelper.COLOR_TAG + "§c/groupmsg §6ID/Name §dGroup §7Message");
+                    sender.sendMessage(RPGStringHelper.COLOR_TAG + "§c/groupmsg §dGroup/ID §6NPC/ID §7Message");
                 }
             }
         }
