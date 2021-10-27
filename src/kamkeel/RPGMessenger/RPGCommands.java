@@ -690,7 +690,7 @@ public class RPGCommands {
                     sender.sendMessage("Usage: /" + label + " <NPCName/ID>" +  " <message>");
                 }
             }
-            else{
+            else {
                 // npcmsg Player (0) NPC/ID (1) chat (2)
                 if (args.length > 2) {
 

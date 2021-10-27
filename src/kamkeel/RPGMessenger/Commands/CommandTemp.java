@@ -15,6 +15,43 @@ public class CommandTemp implements CommandDefault {
 
     // -------------------------------------------------| Temp Commands
     public void TempMSG(CommandSender sender, String label, String[] args){
+        // /tmpmsg Player(0) CustomName(1) MSG(2)
+        if(args.length > 2){
+            Player target = findPlayer(args[0]);
+            if(target != null){
+                NPC tempNPC = new NPC(args[1]);
+
+                int tempIndex = tempControl.npcExactIndex( tempNPC );
+
+                if(tempIndex != -1){
+                    tempNPC = tempControl.getNPC(tempIndex);
+                }
+                else{
+                    tempControl.npcAdd(tempNPC);
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                        public void run() {
+                            tempControl.npcRemove(args[1]);
+                        }
+                    }, 1200 * plugin.getConfig().getInt("Time"));
+                }
+
+                String allArgs = layoutString(2, args);
+
+                Bukkit.getConsoleSender().sendMessage(getSpyFormat(1, tempNPC.getDisplayName(), target.getDisplayName(), allArgs));
+                formMessage(target, tempNPC.getDisplayName(), true, allArgs);
+                sendSpyMessage(sender, 1, true, tempNPC.getDisplayName(), target.getDisplayName(), allArgs);
+
+                setReply(target.getName(), tempNPC.getDisplayName(), 0);
+            }
+            else{
+                sender.sendMessage(RPGStringHelper.COLOR_TAG + "§4Could not find player!");
+            }
+        }
+        else{
+            sender.sendMessage(RPGStringHelper.COLOR_TAG + "§c/" + label + " §6NewName §ePlayer §7Message");
+        }
+    }
+    public void TempMSGLegacy(CommandSender sender, String label, String[] args){
         // /tmpmsg CustomName(0) Player(1) MSG(2)
         if(args.length > 2){
             Player target = findPlayer(args[1]);
@@ -52,11 +89,11 @@ public class CommandTemp implements CommandDefault {
         }
     }
     public void TempLocal(CommandSender sender, String label, String[] args){
-        // /tmplocal CustomName(0) Player(1) MSG(2)
+        // /tmplocal Player(0) CustomName(1) MSG(2)
         if(args.length > 2){
-            Player target = findPlayer(args[1]);
+            Player target = findPlayer(args[0]);
             if(target != null){
-                NPC tempNPC = new NPC(args[0]);
+                NPC tempNPC = new NPC(args[1]);
 
                 int tempIndex = tempControl.npcExactIndex( tempNPC );
 
@@ -67,7 +104,7 @@ public class CommandTemp implements CommandDefault {
                     tempControl.npcAdd(tempNPC);
                     Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
                         public void run() {
-                            tempControl.npcRemove(args[0]);
+                            tempControl.npcRemove(args[1]);
                         }
                     }, 1200 * plugin.getConfig().getInt("Time"));
                 }
@@ -90,19 +127,19 @@ public class CommandTemp implements CommandDefault {
         }
     }
     public void TempGroup(CommandSender sender, String label, String[] args){
-        // /tmpgroup CustomName(0) Group(1) MSG(2)
+        // /tmpgroup Group(0) CustomName(1) MSG(2)
         if(args.length > 2) {
             int groupIndex;
             try {
-                groupIndex = Integer.parseInt(args[1]) - 1;
+                groupIndex = Integer.parseInt(args[0]) - 1;
             } catch (NumberFormatException iobe) {
-                groupIndex = groupControl.groupIndex(args[1]);
+                groupIndex = groupControl.groupIndex(args[0]);
             }
 
             if (groupIndex > -1 && groupControl.validIndex(groupIndex)) {
 
                 String allArgs = layoutString(2, args);
-                NPC tempNPC = new NPC(args[0]);
+                NPC tempNPC = new NPC(args[1]);
 
                 int tempIndex = tempControl.npcExactIndex( tempNPC );
 
@@ -113,7 +150,7 @@ public class CommandTemp implements CommandDefault {
                     tempControl.npcAdd(tempNPC);
                     Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
                         public void run() {
-                            tempControl.npcRemove(args[0]);
+                            tempControl.npcRemove(args[1]);
                         }
                     }, 1200 * plugin.getConfig().getInt("Time"));
                 }
@@ -218,7 +255,12 @@ public class CommandTemp implements CommandDefault {
         if(label.equalsIgnoreCase("tmpmsg") || label.equalsIgnoreCase("tm")
                 || label.equalsIgnoreCase("fma") || label.equalsIgnoreCase("tma")
                 || label.equalsIgnoreCase("tidm")) {
-            TempMSG(sender, label, args);
+            if(label.equalsIgnoreCase("fma")){
+                TempMSGLegacy(sender, label, args);
+            }
+            else {
+                TempMSG(sender, label, args);
+            }
         }
         else if(label.equalsIgnoreCase("tmpgroup") || label.equalsIgnoreCase("tidg")
                 || label.equalsIgnoreCase("tga")) {
